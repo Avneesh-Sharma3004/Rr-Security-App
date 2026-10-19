@@ -4,10 +4,10 @@ import { Ionicons } from "@expo/vector-icons";
 import UserDashboard from "../../module/user/dashboard/UserDashboard";
 import ClientDashboard from "../../module/client/ClientDashboard";
 import EmployeeDashboard from "../../module/employee/dashboard/EmployeeDashboard";
-import MyAttendance from "../../module/employee/attendance/MyAttendance";
 import ShiftManagement from "../../module/user/shifts/ShiftManagement";
 import Clients from "../../module/user/clients/Clients"
 import Employee from "../../module/user/employee/Employee";
+import Attendance from "../../module/user/attendance/Attendance";
 
 const Tab = createBottomTabNavigator();
 const icons = {
@@ -33,7 +33,7 @@ export default function UserTabNavigator() {
       <Tab.Screen name="Dashboard" component={UserDashboard} />
       <Tab.Screen name="Clients" component={Clients} />
       <Tab.Screen name="Employees" component={Employee} />
-      <Tab.Screen name="Attendance" component={MyAttendance} />
+      <Tab.Screen name="Attendance" component={Attendance} />
       <Tab.Screen name="Shifts" component={ShiftManagement} options={{ title: "Shift Management", tabBarLabel: "Shifts" }} />
     </Tab.Navigator>
   );

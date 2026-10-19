@@ -132,8 +132,6 @@ export default function Billing() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Billing &amp; Invoices</Text>
-        <Text style={styles.subtitle}>Billing and invoice module.</Text>
         <View style={styles.summaryGrid}>
           <DashboardCard
             compact
@@ -357,7 +355,7 @@ export default function Billing() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#FFFFFF" },
-  content: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 30 },
+  content: { marginTop:10},
   title: { color: "#101B3A", fontSize: 28, lineHeight: 34, fontWeight: "800" },
   subtitle: { color: "#7485A6", fontSize: 15, marginTop: 3, marginBottom: 15 },
   summaryGrid: {

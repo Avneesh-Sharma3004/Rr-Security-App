@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AllClients from "./AllClients";
 import Billing from "./Billing";
 import CustomTabs from "../../../components/CustomTab";
+import UserHeader from "../../../components/UserHeader";
 
 const stats = [
   {
@@ -61,7 +62,8 @@ const TABS = [
   // Add more tabs here whenever required.
 ];
 
-export default function Clients() {
+export default function Clients({navigation}) {
+  
   const theme = "light"; // "dark" bhi kar sakte ho
 
   // Example employee details
@@ -81,33 +83,7 @@ export default function Clients() {
     edges={["top"]}
   >
     {/* Header */}
-    <CustomHeader height={40} color="#FFFFFF">
-      <View
-        style={{
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.headerContent}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{initial}</Text>
-          </View>
-
-          <View style={styles.employeeInfo}>
-            <Text style={styles.employeeName} numberOfLines={1}>
-              {employee.name}
-            </Text>
-            <Text style={styles.designation} numberOfLines={1}>
-              {employee.designation}
-            </Text>
-          </View>
-        </View>
-
-        <Ionicons name="notifications-outline" size={30}  style={{marginTop:-40}}/>
-      </View>
-    </CustomHeader>
+    <UserHeader navigation={navigation} />
 
     {/* Tabs ko available height do */}
     <View style={{ flex: 1, minHeight: 0,paddingHorizontal:10 }}>
