@@ -138,7 +138,7 @@ export default function Billing() {
           <DashboardCard
             compact
             title="TOTAL INVOICED (YTD)"
-            value="\u20B918,21,920"
+            value="21,920"
             icon="receipt-outline"
             color="#0878FF"
             backgroundColor="#E8F2FF"
@@ -148,7 +148,7 @@ export default function Billing() {
           <DashboardCard
             compact
             title="TOTAL COLLECTED / PAID"
-            value="\u20B910,42,960"
+            value="42,960"
             icon="checkmark-circle-outline"
             color="#00B878"
             backgroundColor="#E4FBF0"
@@ -158,7 +158,7 @@ export default function Billing() {
           <DashboardCard
             compact
             title="OUTSTANDING BALANCE"
-            value="\u20B97,78,960"
+            value="78,960"
             icon="alert-circle-outline"
             color="#F09000"
             backgroundColor="#FFF4DE"
@@ -356,7 +356,7 @@ export default function Billing() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F3F7FD" },
+  screen: { flex: 1, backgroundColor: "#FFFFFF" },
   content: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 30 },
   title: { color: "#101B3A", fontSize: 28, lineHeight: 34, fontWeight: "800" },
   subtitle: { color: "#7485A6", fontSize: 15, marginTop: 3, marginBottom: 15 },

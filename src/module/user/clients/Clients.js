@@ -105,7 +105,7 @@ export default function Clients() {
           </View>
         </View>
 
-        <Ionicons name="notifications-outline" size={30} />
+        <Ionicons name="notifications-outline" size={30}  style={{marginTop:-40}}/>
       </View>
     </CustomHeader>
 
