@@ -18,6 +18,7 @@ import {
   setDrawerOpen,
   setSelectedDrawerItem,
 } from "../../../store/slices/dashboardSlice";
+import { setActiveSubTab } from "../../../store/slices/clientsSlice";
 import { useNavigation } from "@react-navigation/native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -50,13 +51,33 @@ export default function AdminDrawer() {
     dispatch(setDrawerOpen(false));
 
     // Handle navigation mappings if applicable
-    if (subItemTitle === "Client List") {
+    if (subItemTitle === "All Client" || subItemTitle === "Client List") {
+      dispatch(setActiveSubTab("All Clients"));
       navigation.navigate("Clients");
-    } else if (subItemTitle === "Employee List" || subItemTitle === "Onboarding") {
+    } else if (subItemTitle === "Billing") {
+      dispatch(setActiveSubTab("Billing"));
+      navigation.navigate("Clients");
+    } else if (
+      subItemTitle === "All Employee" ||
+      subItemTitle === "Active Employee" ||
+      subItemTitle === "Inactive Employee" ||
+      subItemTitle === "Employee List" ||
+      subItemTitle === "Onboarding"
+    ) {
       navigation.navigate("Employees");
-    } else if (subItemTitle === "Attendance Log" || subItemTitle === "Daily Roster") {
+    } else if (
+      subItemTitle === "Daily Attendance" ||
+      subItemTitle === "Correction Requests" ||
+      subItemTitle === "Attendance Log" ||
+      subItemTitle === "Daily Roster"
+    ) {
       navigation.navigate("Attendance");
-    } else if (subItemTitle === "Shift Schedules") {
+    } else if (
+      subItemTitle === "Shift Roster" ||
+      subItemTitle === "Shift Patterns" ||
+      subItemTitle === "Calender View" ||
+      subItemTitle === "Shift Schedules"
+    ) {
       navigation.navigate("Shift Management");
     } else {
       Alert.alert(
@@ -103,49 +124,49 @@ export default function AdminDrawer() {
         },
       ],
     },
-    // {
-    //   group: "WORKFORCE",
-    //   items: [
-    //     {
-    //       key: "Clients",
-    //       title: "Clients",
-    //       icon: "briefcase-outline",
-    //       subItems: [
-    //         "All Client",
-    //         "Billing"
-    //       ],
-    //     },
-    //     {
-    //       key: "Employees",
-    //       title: "Employees",
-    //       icon: "people-outline",
-    //       subItems: [
-    //         "All Employee",
-    //         "Active Employee",
-    //         "Inactive Employee",
-    //       ],
-    //     },
-    //     {
-    //       key: "Attendance",
-    //       title: "Attendance",
-    //       icon: "checkbox-outline",
-    //       subItems: [
-    //         "Daily Attendance",
-    //         "Correction Requests",
-    //       ],
-    //     },
-    //     {
-    //       key: "Shift Management",
-    //       title: "Shift Management",
-    //       icon: "calendar-outline",
-    //       subItems: [
-    //         "Shift Roster",
-    //         "Shift Patterns",
-    //         "Calender View",
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      group: "WORKFORCE",
+      items: [
+        {
+          key: "Clients",
+          title: "Clients",
+          icon: "briefcase-outline",
+          subItems: [
+            "All Client",
+            "Billing",
+          ],
+        },
+        {
+          key: "Employees",
+          title: "Employees",
+          icon: "people-outline",
+          subItems: [
+            "All Employee",
+            "Active Employee",
+            "Inactive Employee",
+          ],
+        },
+        {
+          key: "Attendance",
+          title: "Attendance",
+          icon: "checkbox-outline",
+          subItems: [
+            "Daily Attendance",
+            "Correction Requests",
+          ],
+        },
+        {
+          key: "Shift Management",
+          title: "Shift Management",
+          icon: "calendar-outline",
+          subItems: [
+            "Shift Roster",
+            "Shift Patterns",
+            "Calender View",
+          ],
+        },
+      ],
+    },
     {
       group: "PAYROLL MANAGEMENT",
       items: [

@@ -21,12 +21,14 @@ import {
   editClient,
   toggleClientStatus,
   deleteClient,
+  setActiveSubTab,
 } from "../../store/slices/clientsSlice";
 import { toggleDrawer } from "../../store/slices/dashboardSlice";
+import ClientBillingView from "./components/ClientBillingView";
 
 export default function AdminClientsScreen() {
   const dispatch = useDispatch();
-  const { clients, searchQuery, selectedStatus } = useSelector(
+  const { clients, searchQuery, selectedStatus, activeSubTab } = useSelector(
     (state) => state.clients
   );
 
@@ -164,11 +166,58 @@ export default function AdminClientsScreen() {
         contentContainerStyle={styles.mainScrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Top Header Row with Title, Badge, Description, and + Add Client Button */}
-        <View style={styles.topSection}>
-          <View style={styles.headerLeft}>
-            <View style={styles.titleRow}>
-              {/* Drawer Menu Button */}
+        {/* Segment Tab Switcher: [ All Clients ]  [ Billing & Invoices ] */}
+        <View style={styles.segmentTabBar}>
+          <TouchableOpacity
+            style={[
+              styles.segmentTabBtn,
+              activeSubTab !== "Billing" && styles.activeSegmentTabBtn,
+            ]}
+            onPress={() => dispatch(setActiveSubTab("All Clients"))}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name="business-outline"
+              size={15}
+              color={activeSubTab !== "Billing" ? "#2563EB" : "#64748B"}
+            />
+            <Text
+              style={[
+                styles.segmentTabText,
+                activeSubTab !== "Billing" && styles.activeSegmentTabText,
+              ]}
+            >
+              All Clients
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.segmentTabBtn,
+              activeSubTab === "Billing" && styles.activeSegmentTabBtn,
+            ]}
+            onPress={() => dispatch(setActiveSubTab("Billing"))}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name="receipt-outline"
+              size={15}
+              color={activeSubTab === "Billing" ? "#2563EB" : "#64748B"}
+            />
+            <Text
+              style={[
+                styles.segmentTabText,
+                activeSubTab === "Billing" && styles.activeSegmentTabText,
+              ]}
+            >
+              Billing & Invoices
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {activeSubTab === "Billing" ? (
+          <View style={{ marginTop: 4 }}>
+            <View style={styles.billingDrawerBar}>
               <TouchableOpacity
                 style={styles.drawerIconBtn}
                 onPress={() => dispatch(toggleDrawer())}
@@ -176,16 +225,36 @@ export default function AdminClientsScreen() {
               >
                 <Ionicons name="menu" size={23} color="#0F172A" />
               </TouchableOpacity>
-
-              <Text style={styles.pageTitle}>Clients</Text>
-
-              {/* Organization Badge */}
-              <View style={styles.orgBadge}>
-                <Text style={styles.orgBadgeText}>
-                  RR Security & Facilities (RRS8392014SEC)
-                </Text>
-              </View>
+              <Text style={styles.billingModuleLabel}>
+                RR Security HRMS • Client Billing
+              </Text>
             </View>
+            <ClientBillingView />
+          </View>
+        ) : (
+          <>
+            {/* Top Header Row with Title, Badge, Description, and + Add Client Button */}
+            <View style={styles.topSection}>
+              <View style={styles.headerLeft}>
+                <View style={styles.titleRow}>
+                  {/* Drawer Menu Button */}
+                  <TouchableOpacity
+                    style={styles.drawerIconBtn}
+                    onPress={() => dispatch(toggleDrawer())}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="menu" size={23} color="#0F172A" />
+                  </TouchableOpacity>
+
+                  <Text style={styles.pageTitle}>Clients</Text>
+
+                  {/* Organization Badge */}
+                  <View style={styles.orgBadge}>
+                    <Text style={styles.orgBadgeText}>
+                      RR Security & Facilities (RRS8392014SEC)
+                    </Text>
+                  </View>
+                </View>
 
             <Text style={styles.pageSubtitle}>
               Manage client companies and workforce assigned to{" "}
@@ -436,6 +505,8 @@ export default function AdminClientsScreen() {
             </View>
           </ScrollView>
         </View>
+        </>
+        )}
       </ScrollView>
 
       {/* Action Popover Menu (Matching Screenshot) */}
@@ -1412,5 +1483,56 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "700",
+  },
+
+  /* Segmented Tab Switcher */
+  segmentTabBar: {
+    flexDirection: "row",
+    backgroundColor: "#F1F5F9",
+    borderRadius: 10,
+    padding: 3,
+    marginBottom: 16,
+    alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  segmentTabBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+  },
+  activeSegmentTabBtn: {
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  segmentTabText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#64748B",
+  },
+  activeSegmentTabText: {
+    color: "#2563EB",
+    fontWeight: "700",
+  },
+
+  /* Billing Drawer Bar */
+  billingDrawerBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 12,
+  },
+  billingModuleLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#64748B",
+    letterSpacing: 0.3,
   },
 });
