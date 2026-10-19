@@ -2,8 +2,6 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import UserDashboard from "../../module/user/dashboard/UserDashboard";
-import ClientDashboard from "../../module/client/ClientDashboard";
-import EmployeeDashboard from "../../module/employee/dashboard/EmployeeDashboard";
 import ShiftManagement from "../../module/user/shifts/ShiftManagement";
 import Clients from "../../module/user/clients/Clients"
 import Employee from "../../module/user/employee/Employee";

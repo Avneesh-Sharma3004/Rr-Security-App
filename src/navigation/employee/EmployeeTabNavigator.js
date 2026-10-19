@@ -23,15 +23,35 @@ export default function EmployeeTabNavigator() {
         headerShown: false,
         tabBarActiveTintColor: "#3157C8",
         tabBarInactiveTintColor: "#929CAF",
-        tabBarStyle: { height: 66, paddingTop: 7, paddingBottom: 8, borderTopColor: "#E9EDF4", backgroundColor: "#FFFFFF" },
+        tabBarStyle: {
+          height: 66,
+          paddingTop: 7,
+          paddingBottom: 8,
+          borderTopColor: "#E9EDF4",
+          backgroundColor: "#FFFFFF",
+        },
         tabBarLabelStyle: { fontSize: 10, fontWeight: "600" },
-        tabBarIcon: ({ color, size }) => <Ionicons name={icons[route.name] || "ellipse-outline"} size={size} color={color} />,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons
+            name={icons[route.name] || "ellipse-outline"}
+            size={size}
+            color={color}
+          />
+        ),
       })}
     >
       <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
       <Tab.Screen name="My Attendance" component={MyAttendance} />
-      <Tab.Screen name="MyLeave" component={MyLeave} options={{ title: "My Leave" }} />
-      <Tab.Screen name="SalarySlip" component={SalarySlip} options={{ title: "Salary" }} />
+      <Tab.Screen
+        name="MyLeave"
+        component={MyLeave}
+        options={{ title: "My Leave" }}
+      />
+      <Tab.Screen
+        name="SalarySlip"
+        component={SalarySlip}
+        options={{ title: "Salary" }}
+      />
       <Tab.Screen name="Assets" component={Assets} />
     </Tab.Navigator>
   );
