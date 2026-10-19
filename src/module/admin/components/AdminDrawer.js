@@ -103,51 +103,49 @@ export default function AdminDrawer() {
         },
       ],
     },
-    {
-      group: "WORKFORCE",
-      items: [
-        {
-          key: "Clients",
-          title: "Clients",
-          icon: "briefcase-outline",
-          subItems: [
-            "Client List",
-            "Site Locations",
-            "Contract Agreements",
-          ],
-        },
-        {
-          key: "Employees",
-          title: "Employees",
-          icon: "people-outline",
-          subItems: [
-            "Employee List",
-            "Onboarding",
-            "Document Verification",
-          ],
-        },
-        {
-          key: "Attendance",
-          title: "Attendance",
-          icon: "checkbox-outline",
-          subItems: [
-            "Attendance Log",
-            "Daily Roster",
-            "Biometric Devices",
-          ],
-        },
-        {
-          key: "Shift Management",
-          title: "Shift Management",
-          icon: "calendar-outline",
-          subItems: [
-            "Shift Schedules",
-            "Guard Allocation",
-            "Rotation Plan",
-          ],
-        },
-      ],
-    },
+    // {
+    //   group: "WORKFORCE",
+    //   items: [
+    //     {
+    //       key: "Clients",
+    //       title: "Clients",
+    //       icon: "briefcase-outline",
+    //       subItems: [
+    //         "All Client",
+    //         "Billing"
+    //       ],
+    //     },
+    //     {
+    //       key: "Employees",
+    //       title: "Employees",
+    //       icon: "people-outline",
+    //       subItems: [
+    //         "All Employee",
+    //         "Active Employee",
+    //         "Inactive Employee",
+    //       ],
+    //     },
+    //     {
+    //       key: "Attendance",
+    //       title: "Attendance",
+    //       icon: "checkbox-outline",
+    //       subItems: [
+    //         "Daily Attendance",
+    //         "Correction Requests",
+    //       ],
+    //     },
+    //     {
+    //       key: "Shift Management",
+    //       title: "Shift Management",
+    //       icon: "calendar-outline",
+    //       subItems: [
+    //         "Shift Roster",
+    //         "Shift Patterns",
+    //         "Calender View",
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       group: "PAYROLL MANAGEMENT",
       items: [
@@ -181,11 +179,14 @@ export default function AdminDrawer() {
           title: "Statutory Setup",
           icon: "library-outline",
           subItems: [
-            "Provident Fund (PF)",
-            "ESIC Setup",
-            "Professional Tax (PT)",
-            "Labour Welfare Fund (LWF)",
-            "TDS & Tax Slabs",
+            "Overview",
+            "PF (Provident Fund)",
+            "ESI",
+            "PT (Professional Tax)",
+            "TDS",
+            "Bonus",
+            "Gratuity",
+            "Labour Welfare Fund(LWF)"
           ],
         },
         {
@@ -193,9 +194,11 @@ export default function AdminDrawer() {
           title: "Advances & Loans",
           icon: "swap-horizontal-outline",
           subItems: [
-            "Loan Requests",
-            "Salary Advance",
-            "EMI Deduction Schedule",
+            "All Requests",
+            "Advances",
+            "Loan",
+            "Deduction Schedule",
+            "Deduction History",
           ],
         },
         {
@@ -203,9 +206,10 @@ export default function AdminDrawer() {
           title: "Reimbursements",
           icon: "receipt-outline",
           subItems: [
-            "Claims Processing",
-            "Travel & Conveyance",
-            "Uniform & Kit Allowance",
+            "All Claims",
+            "Pending Approvals",
+            "Expanse Types Master",
+            "Reports & Analytics",
           ],
         },
         {
@@ -213,9 +217,10 @@ export default function AdminDrawer() {
           title: "Overtime",
           icon: "time-outline",
           subItems: [
-            "Overtime Rules",
-            "OT Approvals",
-            "Holiday Rates",
+            "All Overtime",
+            "Pending Approvals",
+            "Overtime History",
+            "Client & Dept Analytics",
           ],
         },
       ],
@@ -228,9 +233,10 @@ export default function AdminDrawer() {
           title: "Leave",
           icon: "calendar-number-outline",
           subItems: [
-            "Leave Applications",
-            "Leave Balance",
-            "Holiday Calendar",
+            "Leave Requests",
+            "Employee Balance",
+            "Leave Master",
+            "Roster & Calendar",
           ],
         },
         {
@@ -238,10 +244,12 @@ export default function AdminDrawer() {
           title: "Inventory",
           icon: "cube-outline",
           subItems: [
+            "Inventory Stock",
             "Uniforms & Badges",
-            "Walkie-Talkies & Torches",
-            "Security Equipment",
-            "Stock Register",
+            "Issued Items",
+            "Return History",
+            "Stock Movements",
+            "Assest Clearance",
           ],
         },
         {
@@ -260,9 +268,16 @@ export default function AdminDrawer() {
           title: "Masters",
           icon: "git-network-outline",
           subItems: [
-            "General Settings",
-            "Shift Categories",
-            "Guard Grades",
+            "Banks",
+            "Clients",
+            "Employee Types",
+            "Sites",
+            "Posts",
+            "Shifts",
+            "Leave Type",
+            "Holidays",
+            "Sallary Components",
+            "Documents",
           ],
         },
         {
@@ -270,9 +285,9 @@ export default function AdminDrawer() {
           title: "Role & Permissions",
           icon: "shield-checkmark-outline",
           subItems: [
-            "User Roles",
-            "Access Control",
-            "Audit Trail",
+            "Configured Roles",
+            "Assigned Users",
+            "Permission Matrix",
           ],
         },
         {
@@ -280,10 +295,10 @@ export default function AdminDrawer() {
           title: "User Management",
           icon: "people-outline",
           subItems: [
-            "Admin Users",
-            "Client Portal Users",
-            "Employee Portal Users",
-            "Password & Security Policies",
+            "All Users",
+            "Active Users",
+            "Inactive Users",
+            "Roles & Access ",
           ],
         },
         {
@@ -291,10 +306,11 @@ export default function AdminDrawer() {
           title: "Preferences",
           icon: "options-outline",
           subItems: [
-            "General Preferences",
-            "Language & Region",
-            "Date, Time & Timezone",
-            "Currency & Units",
+            "Overview",
+            "Employee Portal",
+            "Email Settings",
+            "Notification Settings",
+            "Approval Settings",
           ],
         },
         {
@@ -302,10 +318,13 @@ export default function AdminDrawer() {
           title: "Template Setup",
           icon: "document-text-outline",
           subItems: [
-            "Salary Slip Template",
-            "Offer Letter Template",
-            "Relieving Letter Template",
-            "ID Card Template",
+            "Overview",
+            "Salary Slip",
+            "Appointment Letter",
+            "Joining Letter",
+            "Experience Letter",
+            "Full & Final Settlement",
+
           ],
         },
         {
@@ -319,10 +338,10 @@ export default function AdminDrawer() {
           title: "Docs & Compliance",
           icon: "document-attach-outline",
           subItems: [
-            "Statutory Compliance Check",
-            "Police Verification Records",
-            "Guard License Documents",
-            "Client Agreement Archival",
+            "Overview",
+            "Verification Rules",
+            "Expiry Alert",
+            "Police Verification",
           ],
         },
         {
@@ -330,10 +349,8 @@ export default function AdminDrawer() {
           title: "Notifications",
           icon: "notifications-outline",
           subItems: [
-            "Alert Rules & Triggers",
-            "Email Configuration",
-            "SMS & WhatsApp Alerts",
-            "Push Notifications",
+            "Announcements",
+            "Notifications",
           ],
         },
       ],

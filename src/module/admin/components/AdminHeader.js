@@ -78,16 +78,16 @@ export default function AdminHeader({
           </TouchableOpacity>
 
           {/* Logout / Switch User */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.iconButton}
             onPress={logout}
             activeOpacity={0.7}
           >
             <Ionicons name="log-out-outline" size={21} color="#EF4444" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* Profile Card */}
-          <View style={styles.profileBadge}>
+          {/* <View style={styles.profileBadge}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>RR</Text>
             </View>
@@ -97,7 +97,7 @@ export default function AdminHeader({
               </Text>
               <Text style={styles.profileRole}>Administrator</Text>
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
 
