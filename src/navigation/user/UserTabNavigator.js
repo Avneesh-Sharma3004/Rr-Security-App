@@ -6,7 +6,7 @@ import ClientDashboard from "../../module/client/ClientDashboard";
 import EmployeeDashboard from "../../module/employee/dashboard/EmployeeDashboard";
 import MyAttendance from "../../module/employee/attendance/MyAttendance";
 import ShiftManagement from "../../module/user/shifts/ShiftManagement";
-import Clients from "../../module/user/clients/Clients";
+import Clients from "../../module/user/clients/Clients"
 
 const Tab = createBottomTabNavigator();
 const icons = {
