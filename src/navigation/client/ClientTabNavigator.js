@@ -21,7 +21,7 @@ export default function ClientTabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: "#16A34A",
+        tabBarActiveTintColor: "#3157C8",
         tabBarInactiveTintColor: "#94A3B8",
         tabBarStyle: {
           height: 66,
