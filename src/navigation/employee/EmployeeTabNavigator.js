@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import useBottomTabBarStyle from "../useBottomTabBarStyle";
 import EmployeeDashboard from "../../module/employee/dashboard/EmployeeDashboard";
 import MyAttendance from "../../module/employee/attendance/MyAttendance";
 import MyLeave from "../../module/employee/leave/MyLeave";
@@ -17,19 +18,18 @@ const icons = {
 };
 
 export default function EmployeeTabNavigator() {
+  const tabBarStyle = useBottomTabBarStyle({
+    borderTopColor: "#E9EDF4",
+    backgroundColor: "#FFFFFF",
+  });
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: "#3157C8",
         tabBarInactiveTintColor: "#929CAF",
-        tabBarStyle: {
-          height: 66,
-          paddingTop: 7,
-          paddingBottom: 8,
-          borderTopColor: "#E9EDF4",
-          backgroundColor: "#FFFFFF",
-        },
+        tabBarStyle,
         tabBarLabelStyle: { fontSize: 10, fontWeight: "600" },
         tabBarIcon: ({ color, size }) => (
           <Ionicons

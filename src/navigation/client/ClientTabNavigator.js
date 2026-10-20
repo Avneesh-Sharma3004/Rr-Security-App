@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import useBottomTabBarStyle from "../useBottomTabBarStyle";
 import ClientDashboard from "../../module/client/dashboard/ClientDashboard";
 import Attendance from "../../module/client/attendance/Attendance";
 import Billing from "../../module/client/billing/Billing";
@@ -17,19 +18,18 @@ const TAB_ICONS = {
 };
 
 export default function ClientTabNavigator() {
+  const tabBarStyle = useBottomTabBarStyle({
+    borderTopColor: "#E9EDF4",
+    backgroundColor: "#FFFFFF",
+  });
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: "#3157C8",
         tabBarInactiveTintColor: "#94A3B8",
-        tabBarStyle: {
-          height: 66,
-          paddingTop: 7,
-          paddingBottom: 8,
-          borderTopColor: "#E9EDF4",
-          backgroundColor: "#FFFFFF",
-        },
+        tabBarStyle,
         tabBarLabelStyle: { fontSize: 10, fontWeight: "600" },
         tabBarIcon: ({ color, size }) => (
           <Ionicons

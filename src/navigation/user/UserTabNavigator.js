@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import useBottomTabBarStyle from "../useBottomTabBarStyle";
 import UserDashboard from "../../module/user/dashboard/UserDashboard";
 import ShiftManagement from "../../module/user/shifts/ShiftManagement";
 import Clients from "../../module/user/clients/Clients"
@@ -17,13 +18,18 @@ const icons = {
 };
 
 export default function UserTabNavigator() {
+  const tabBarStyle = useBottomTabBarStyle({
+    borderTopColor: "#E9EDF4",
+    backgroundColor: "#FFFFFF",
+  });
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: "#3157C8",
         tabBarInactiveTintColor: "#929CAF",
-        tabBarStyle: { height: 66, paddingTop: 7, paddingBottom: 8, borderTopColor: "#E9EDF4", backgroundColor: "#FFFFFF" },
+        tabBarStyle,
         tabBarLabelStyle: { fontSize: 10, fontWeight: "600" },
         tabBarIcon: ({ color, size }) => <Ionicons name={icons[route.name] || "ellipse-outline"} size={size} color={color} />,
       })}

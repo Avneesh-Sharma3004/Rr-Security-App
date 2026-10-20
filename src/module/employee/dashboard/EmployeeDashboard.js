@@ -8,9 +8,9 @@ import { Ionicons } from "@expo/vector-icons";
 import DashboardCard from "../../../components/DashboardCard";
 import AttendanceCard from "../../../components/AttendanceCard";
 import SalarySlipCard from "../../../components/SalarySlipCard";
-import UserHeader from "../../../components/UserHeader"
+import UserHeader from "../../../components/UserHeader";
 
-export default function EmployeeDashboard({navigation}) {
+export default function EmployeeDashboard({ navigation }) {
   const { logout } = useAuth();
   const theme = "light"; // "dark" bhi kar sakte ho
 
@@ -43,7 +43,6 @@ export default function EmployeeDashboard({navigation}) {
             <Text style={styles.heading}>My Attendance</Text>
           </View> */}
 
-            <CustomButton title="Logout" color="red" onPress={logout} />
             <View style={{ gap: 10, marginTop: 5 }}>
               <View style={styles.cardContainer}>
                 <DashboardCard
