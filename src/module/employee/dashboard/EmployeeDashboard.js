@@ -8,8 +8,9 @@ import { Ionicons } from "@expo/vector-icons";
 import DashboardCard from "../../../components/DashboardCard";
 import AttendanceCard from "../../../components/AttendanceCard";
 import SalarySlipCard from "../../../components/SalarySlipCard";
+import UserHeader from "../../../components/UserHeader";
 
-export default function EmployeeDashboard() {
+export default function EmployeeDashboard({ navigation }) {
   const { logout } = useAuth();
   const theme = "light"; // "dark" bhi kar sakte ho
 
@@ -34,37 +35,7 @@ export default function EmployeeDashboard() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <ScrollView>
-        <CustomHeader height={40} color="#FFFFFF">
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            {/* Circular Profile Avatar */}
-            <View style={styles.headerContent}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{initial}</Text>
-              </View>
-
-              {/* Employee Details */}
-              <View style={styles.employeeInfo}>
-                <Text style={styles.employeeName} numberOfLines={1}>
-                  {employee.name}
-                </Text>
-
-                <Text style={styles.designation} numberOfLines={1}>
-                  {employee.designation}
-                </Text>
-              </View>
-            </View>
-            <View style={{ marginTop: -40 }}>
-              <Ionicons name="notifications-outline" size={30} />
-            </View>
-          </View>
-        </CustomHeader>
+        <UserHeader navigation={navigation} />
 
         <View style={styles.content}>
           <View>
@@ -72,7 +43,6 @@ export default function EmployeeDashboard() {
             <Text style={styles.heading}>My Attendance</Text>
           </View> */}
 
-            <CustomButton title="Logout" color="red" onPress={logout} />
             <View style={{ gap: 10, marginTop: 5 }}>
               <View style={styles.cardContainer}>
                 <DashboardCard

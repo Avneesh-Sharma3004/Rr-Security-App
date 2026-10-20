@@ -13,6 +13,11 @@ import AdminDrawer from "../../module/admin/components/AdminDrawer";
 const Tab = createBottomTabNavigator();
 
 export default function AdminTabNavigator() {
+  const tabBarStyle = useBottomTabBarStyle({
+    borderTopColor: "#E9EDF4",
+    backgroundColor: "#FFFFFF",
+  });
+
   return (
     <>
       <Tab.Navigator
