@@ -55,19 +55,30 @@ export default function AdminDashboard() {
     }, 600);
   };
 
+  const navigateToTab = (tabName, params) => {
+    try {
+      navigation.navigate(tabName, params);
+    } catch {
+      navigation.navigate("AdminTabs", {
+        screen: tabName,
+        params,
+      });
+    }
+  };
+
   const handleQuickAction = (actionId) => {
     switch (actionId) {
       case "add_employee":
-        navigation.navigate("Employees");
+        navigateToTab("Employees");
         break;
       case "add_client":
-        navigation.navigate("Clients");
+        navigateToTab("Clients");
         break;
       case "create_shift":
-        navigation.navigate("Shift Management");
+        navigateToTab("Shift Management");
         break;
       case "attendance_override":
-        navigation.navigate("Attendance");
+        navigateToTab("Attendance");
         break;
       case "generate_payroll":
         Alert.alert(
@@ -227,12 +238,7 @@ export default function AdminDashboard() {
             icon={quickInsights.monthlyPayroll.icon}
             color={quickInsights.monthlyPayroll.color}
             bgColor={quickInsights.monthlyPayroll.bgColor}
-            onPressAction={() =>
-              Alert.alert(
-                "Payroll Breakdown",
-                "Total Basic: ₹ 54,000\nAllowances: ₹ 18,500\nPF & ESIC: ₹ 2,819\nNet: ₹ 69,681"
-              )
-            }
+            onPressAction={() => navigation.navigate("PayrollSetup")}
           />
 
           <QuickInsightCard
@@ -243,7 +249,7 @@ export default function AdminDashboard() {
             icon={quickInsights.attendanceToday.icon}
             color={quickInsights.attendanceToday.color}
             bgColor={quickInsights.attendanceToday.bgColor}
-            onPressAction={() => navigation.navigate("Attendance")}
+            onPressAction={() => navigateToTab("Attendance")}
           />
 
           <QuickInsightCard
@@ -305,7 +311,7 @@ export default function AdminDashboard() {
         {/* Department Distribution Card */}
         <DepartmentBreakdownCard
           departments={departmentDistribution}
-          onViewReport={() => navigation.navigate("Employees")}
+          onViewReport={() => navigateToTab("Employees")}
         />
 
         {/* Recent Activities Card */}

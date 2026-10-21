@@ -19,7 +19,12 @@ import {
   setSelectedDrawerItem,
 } from "../../../store/slices/dashboardSlice";
 import { setActiveSubTab } from "../../../store/slices/clientsSlice";
+import { setStatusTab } from "../../../store/slices/employeesSlice";
+import { setActiveShiftSubTab } from "../../../store/slices/shiftsSlice";
+import { setActivePayrollSubTab } from "../../../store/slices/payrollSlice";
+import { setActiveStatutorySubTab } from "../../../store/slices/statutorySlice";
 import { useNavigation } from "@react-navigation/native";
+import navigationServices from "../../../navigation/navigationServices";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const DRAWER_WIDTH = Math.min(SCREEN_WIDTH * 0.84, 340);
@@ -46,17 +51,39 @@ export default function AdminDrawer() {
     }));
   };
 
+  const navigateToTab = (tabName, params) => {
+    try {
+      navigation.navigate("AdminTabs", {
+        screen: tabName,
+        params,
+      });
+    } catch {
+      try {
+        navigationServices.navigate("AdminTabs", {
+          screen: tabName,
+          params,
+        });
+      } catch (err) {
+        navigation.navigate(tabName, params);
+      }
+    }
+  };
+
   const handleSelectSubItem = (parentKey, subItemTitle) => {
     dispatch(setSelectedDrawerItem(subItemTitle));
     dispatch(setDrawerOpen(false));
 
     // Handle navigation mappings if applicable
-    if (subItemTitle === "All Client" || subItemTitle === "Client List") {
+    if (
+      subItemTitle === "All Client" ||
+      subItemTitle === "Client List" ||
+      subItemTitle === "Clients"
+    ) {
       dispatch(setActiveSubTab("All Clients"));
-      navigation.navigate("Clients");
+      navigateToTab("Clients");
     } else if (subItemTitle === "Billing") {
       dispatch(setActiveSubTab("Billing"));
-      navigation.navigate("Clients");
+      navigateToTab("Clients");
     } else if (
       subItemTitle === "All Employee" ||
       subItemTitle === "Active Employee" ||
@@ -64,21 +91,84 @@ export default function AdminDrawer() {
       subItemTitle === "Employee List" ||
       subItemTitle === "Onboarding"
     ) {
-      navigation.navigate("Employees");
+      if (subItemTitle === "Active Employee") {
+        dispatch(setStatusTab("Active"));
+      } else if (subItemTitle === "Inactive Employee") {
+        dispatch(setStatusTab("Inactive"));
+      } else if (subItemTitle === "All Employee") {
+        dispatch(setStatusTab("All"));
+      }
+      navigateToTab("Employees");
     } else if (
       subItemTitle === "Daily Attendance" ||
       subItemTitle === "Correction Requests" ||
       subItemTitle === "Attendance Log" ||
       subItemTitle === "Daily Roster"
     ) {
-      navigation.navigate("Attendance");
+      navigateToTab("Attendance");
     } else if (
       subItemTitle === "Shift Roster" ||
       subItemTitle === "Shift Patterns" ||
       subItemTitle === "Calender View" ||
       subItemTitle === "Shift Schedules"
     ) {
-      navigation.navigate("Shift Management");
+      if (subItemTitle === "Shift Patterns") {
+        dispatch(setActiveShiftSubTab("Shift Patterns"));
+      } else if (subItemTitle === "Calender View") {
+        dispatch(setActiveShiftSubTab("Calendar View"));
+      } else {
+        dispatch(setActiveShiftSubTab("Shift Roster"));
+      }
+      navigateToTab("Shift Management");
+    } else if (
+      parentKey === "Payroll Setup" ||
+      subItemTitle === "Pay Groups" ||
+      subItemTitle === "Pay Schedules" ||
+      subItemTitle === "Pay Cycles" ||
+      subItemTitle === "Pay Days" ||
+      subItemTitle === "Calculation Methods"
+    ) {
+      if (
+        subItemTitle === "Pay Groups" ||
+        subItemTitle === "Pay Schedules" ||
+        subItemTitle === "Pay Cycles" ||
+        subItemTitle === "Pay Days" ||
+        subItemTitle === "Calculation Methods"
+      ) {
+        dispatch(setActivePayrollSubTab(subItemTitle));
+      } else {
+        dispatch(setActivePayrollSubTab("Pay Groups"));
+      }
+      try {
+        navigation.navigate("PayrollSetup");
+      } catch {
+        try {
+          navigationServices.navigate("PayrollSetup");
+        } catch {
+          navigateToTab("PayrollSetup");
+        }
+      }
+    } else if (
+      parentKey === "Statutory Setup" ||
+      subItemTitle === "Overview" ||
+      subItemTitle === "PF (Provident Fund)" ||
+      subItemTitle === "ESI" ||
+      subItemTitle === "PT (Professional Tax)" ||
+      subItemTitle === "TDS" ||
+      subItemTitle === "Bonus" ||
+      subItemTitle === "Gratuity" ||
+      subItemTitle === "Labour Welfare Fund(LWF)"
+    ) {
+      dispatch(setActiveStatutorySubTab(subItemTitle || "Overview"));
+      try {
+        navigation.navigate("StatutorySetup");
+      } catch {
+        try {
+          navigationServices.navigate("StatutorySetup");
+        } catch {
+          navigateToTab("StatutorySetup");
+        }
+      }
     } else {
       Alert.alert(
         `${parentKey} • ${subItemTitle}`,
@@ -91,7 +181,7 @@ export default function AdminDrawer() {
     dispatch(setSelectedDrawerItem(label));
     dispatch(setDrawerOpen(false));
     if (routeName) {
-      navigation.navigate(routeName);
+      navigateToTab(routeName);
     }
   };
 

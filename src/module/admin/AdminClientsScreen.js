@@ -24,10 +24,12 @@ import {
   setActiveSubTab,
 } from "../../store/slices/clientsSlice";
 import { toggleDrawer } from "../../store/slices/dashboardSlice";
+import { useAuth } from "../../hooks/UseAuth";
 import ClientBillingView from "./components/ClientBillingView";
 
 export default function AdminClientsScreen() {
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const { clients, searchQuery, selectedStatus, activeSubTab } = useSelector(
     (state) => state.clients
   );
@@ -38,6 +40,11 @@ export default function AdminClientsScreen() {
   const [activeMenuClient, setActiveMenuClient] = useState(null); // client object for action popover
   const [detailsModalClient, setDetailsModalClient] = useState(null);
   const [credentialsModalClient, setCredentialsModalClient] = useState(null);
+  const [expandedClientId, setExpandedClientId] = useState(null);
+
+  const toggleExpandClient = (id) => {
+    setExpandedClientId((prev) => (prev === id ? null : id));
+  };
 
   // Add / Edit Form State
   const [editingClientId, setEditingClientId] = useState(null);
@@ -161,30 +168,48 @@ export default function AdminClientsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <ScrollView
-        style={styles.mainScrollView}
-        contentContainerStyle={styles.mainScrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Segment Tab Switcher: [ All Clients ]  [ Billing & Invoices ] */}
-        <View style={styles.segmentTabBar}>
+      {/* Top User Header Bar matching user's phone screenshot */}
+      <View style={styles.userHeaderBar}>
+        <View style={styles.userInfoRow}>
+          <View style={styles.userAvatarCircle}>
+            <Text style={styles.userAvatarInitial}>
+              {(user?.name ? user.name[0] : "N").toUpperCase()}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.userNameText}>
+              {user?.name || "Normal User"}
+            </Text>
+            <Text style={styles.userRoleText}>
+              {user?.role === "ADMIN" ? "Admin" : "User"}
+            </Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.drawerHamburgerBtn}
+          onPress={() => dispatch(toggleDrawer())}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="menu" size={24} color="#334155" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Segment Tab Switcher matching exact phone UI: [ All Clients ]  [ Billing ] */}
+      <View style={styles.pillTabBarWrap}>
+        <View style={styles.pillTabBar}>
           <TouchableOpacity
             style={[
-              styles.segmentTabBtn,
-              activeSubTab !== "Billing" && styles.activeSegmentTabBtn,
+              styles.pillTabBtn,
+              activeSubTab !== "Billing" && styles.activePillTabBtn,
             ]}
             onPress={() => dispatch(setActiveSubTab("All Clients"))}
-            activeOpacity={0.7}
+            activeOpacity={0.8}
           >
-            <Ionicons
-              name="business-outline"
-              size={15}
-              color={activeSubTab !== "Billing" ? "#2563EB" : "#64748B"}
-            />
             <Text
               style={[
-                styles.segmentTabText,
-                activeSubTab !== "Billing" && styles.activeSegmentTabText,
+                styles.pillTabText,
+                activeSubTab !== "Billing" && styles.activePillTabText,
               ]}
             >
               All Clients
@@ -193,44 +218,31 @@ export default function AdminClientsScreen() {
 
           <TouchableOpacity
             style={[
-              styles.segmentTabBtn,
-              activeSubTab === "Billing" && styles.activeSegmentTabBtn,
+              styles.pillTabBtn,
+              activeSubTab === "Billing" && styles.activePillTabBtn,
             ]}
             onPress={() => dispatch(setActiveSubTab("Billing"))}
-            activeOpacity={0.7}
+            activeOpacity={0.8}
           >
-            <Ionicons
-              name="receipt-outline"
-              size={15}
-              color={activeSubTab === "Billing" ? "#2563EB" : "#64748B"}
-            />
             <Text
               style={[
-                styles.segmentTabText,
-                activeSubTab === "Billing" && styles.activeSegmentTabText,
+                styles.pillTabText,
+                activeSubTab === "Billing" && styles.activePillTabText,
               ]}
             >
-              Billing & Invoices
+              Billing
             </Text>
           </TouchableOpacity>
         </View>
+      </View>
 
+      <ScrollView
+        style={styles.mainScrollView}
+        contentContainerStyle={styles.mainScrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {activeSubTab === "Billing" ? (
-          <View style={{ marginTop: 4 }}>
-            <View style={styles.billingDrawerBar}>
-              <TouchableOpacity
-                style={styles.drawerIconBtn}
-                onPress={() => dispatch(toggleDrawer())}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="menu" size={23} color="#0F172A" />
-              </TouchableOpacity>
-              <Text style={styles.billingModuleLabel}>
-                RR Security HRMS • Client Billing
-              </Text>
-            </View>
-            <ClientBillingView />
-          </View>
+          <ClientBillingView />
         ) : (
           <>
             {/* Top Header Row with Title, Badge, Description, and + Add Client Button */}
@@ -365,145 +377,283 @@ export default function AdminClientsScreen() {
           </View>
         </View>
 
-        {/* Data Table with Horizontal Scroll */}
-        <View style={styles.tableCard}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={true}
-            contentContainerStyle={styles.tableHorizontalScroll}
-          >
-            <View style={styles.tableInner}>
-              {/* Table Header Row */}
-              <View style={styles.tableHeaderRow}>
-                <Text style={[styles.thCell, { width: 100 }]}>CLIENT ID</Text>
-                <Text style={[styles.thCell, { width: 260 }]}>CLIENT</Text>
-                <Text style={[styles.thCell, { width: 160 }]}>GSTIN</Text>
-                <Text style={[styles.thCell, { width: 180 }]}>CONTACT PERSON</Text>
-                <Text style={[styles.thCell, { width: 140 }]}>CONTRACT START</Text>
-                <Text style={[styles.thCell, { width: 140 }]}>CONTRACT END</Text>
-                <Text style={[styles.thCell, { width: 120 }]}>EMPLOYEES</Text>
-                <Text style={[styles.thCell, { width: 100 }]}>STATUS</Text>
-                <Text style={[styles.thCell, { width: 70, textAlign: "center" }]}>
-                  ACTION
-                </Text>
-              </View>
+        {/* Client Cards List (Mobile-Optimized, Expandable on Press, No Horizontal Scroll) */}
+        <View style={styles.clientCardsList}>
+          {filteredClients.map((client) => {
+            const isExpanded = expandedClientId === client.id;
+            const isActive = client.status === "Active";
 
-              {/* Table Body Rows */}
-              {filteredClients.map((client) => {
-                const isActive = client.status === "Active";
+            return (
+              <View key={client.id} style={styles.clientCard}>
+                {/* Clickable Header: Name, ID, Status, and Chevron Indicator */}
+                <TouchableOpacity
+                  style={styles.cardHeaderTouchable}
+                  onPress={() => toggleExpandClient(client.id)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.initialBox}>
+                    <Text style={styles.initialText}>{client.initial}</Text>
+                  </View>
 
-                return (
-                  <View key={client.id} style={styles.tableRow}>
-                    {/* Client ID */}
-                    <View style={[styles.tdCell, { width: 100 }]}>
-                      <Text style={styles.clientIdText}>{client.clientId}</Text>
+                  <View style={styles.clientMainInfo}>
+                    <Text style={styles.clientCardName} numberOfLines={1}>
+                      {client.name}
+                    </Text>
+                    <View style={styles.clientIdPill}>
+                      <Text style={styles.clientIdPillText}>
+                        {client.clientId}
+                      </Text>
                     </View>
+                  </View>
 
-                    {/* Client (Avatar, Name, Address) */}
+                  <View style={styles.cardRightCol}>
                     <View
                       style={[
-                        styles.tdCell,
-                        { width: 260, flexDirection: "row", alignItems: "center", gap: 10 },
+                        styles.statusBadge,
+                        {
+                          backgroundColor: isActive ? "#DCFCE7" : "#FEE2E2",
+                        },
                       ]}
                     >
-                      <View style={styles.initialBox}>
-                        <Text style={styles.initialText}>{client.initial}</Text>
-                      </View>
-                      <View style={styles.clientTextContainer}>
-                        <Text style={styles.clientNameText} numberOfLines={1}>
-                          {client.name}
-                        </Text>
-                        <Text style={styles.clientAddressText} numberOfLines={1}>
-                          {client.address}
-                        </Text>
-                      </View>
-                    </View>
-
-                    {/* GSTIN */}
-                    <View style={[styles.tdCell, { width: 160 }]}>
-                      <Text style={styles.gstinText}>{client.gstin}</Text>
-                    </View>
-
-                    {/* Contact Person (Name & Phone) */}
-                    <View style={[styles.tdCell, { width: 180 }]}>
-                      <Text style={styles.contactNameText}>
-                        {client.contactPerson}
-                      </Text>
-                      <Text style={styles.contactPhoneText}>{client.phone}</Text>
-                    </View>
-
-                    {/* Contract Start */}
-                    <View style={[styles.tdCell, { width: 140 }]}>
-                      <Text style={styles.dateCellText}>
-                        {client.contractStart}
-                      </Text>
-                    </View>
-
-                    {/* Contract End */}
-                    <View style={[styles.tdCell, { width: 140 }]}>
-                      <Text style={styles.dateCellText}>{client.contractEnd}</Text>
-                    </View>
-
-                    {/* Employees */}
-                    <View style={[styles.tdCell, { width: 120 }]}>
-                      <Text style={styles.employeesCountText}>
-                        {client.employees}{" "}
-                        {client.employees === 1 ? "Employee" : "Employees"}
-                      </Text>
-                    </View>
-
-                    {/* Status */}
-                    <View style={[styles.tdCell, { width: 100 }]}>
-                      <View
+                      <Text
                         style={[
-                          styles.statusBadge,
-                          {
-                            backgroundColor: isActive ? "#DCFCE7" : "#FEE2E2",
-                          },
+                          styles.statusBadgeText,
+                          { color: isActive ? "#16A34A" : "#DC2626" },
                         ]}
                       >
-                        <Text
-                          style={[
-                            styles.statusBadgeText,
-                            { color: isActive ? "#16A34A" : "#DC2626" },
-                          ]}
-                        >
-                          {client.status}
-                        </Text>
+                        {client.status}
+                      </Text>
+                    </View>
+                    <Ionicons
+                      name={isExpanded ? "chevron-up" : "chevron-down"}
+                      size={18}
+                      color="#64748B"
+                    />
+                  </View>
+                </TouchableOpacity>
+
+                {/* When Pressed / Expanded: Details & Action Buttons */}
+                {isExpanded && (
+                  <View style={styles.cardExpandedContent}>
+                    {/* Details Box */}
+                    <View style={styles.cardDetailsBox}>
+                      {/* Row 1: Contact Person & Phone */}
+                      <View style={styles.detailRow}>
+                        <View style={styles.detailItemHalf}>
+                          <Text style={styles.detailLabel}>CONTACT PERSON</Text>
+                          <View style={styles.detailValWithIcon}>
+                            <Ionicons
+                              name="person-outline"
+                              size={12}
+                              color="#64748B"
+                            />
+                            <Text style={styles.detailValue} numberOfLines={1}>
+                              {client.contactPerson}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.detailItemHalf}>
+                          <Text style={styles.detailLabel}>PHONE</Text>
+                          <View style={styles.detailValWithIcon}>
+                            <Ionicons
+                              name="call-outline"
+                              size={12}
+                              color="#64748B"
+                            />
+                            <Text style={styles.detailValue} numberOfLines={1}>
+                              {client.phone}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Row 2: GSTIN & Workforce */}
+                      <View style={styles.detailRow}>
+                        <View style={styles.detailItemHalf}>
+                          <Text style={styles.detailLabel}>GSTIN</Text>
+                          <Text style={styles.detailValue} numberOfLines={1}>
+                            {client.gstin}
+                          </Text>
+                        </View>
+
+                        <View style={styles.detailItemHalf}>
+                          <Text style={styles.detailLabel}>WORKFORCE</Text>
+                          <View style={styles.detailValWithIcon}>
+                            <Ionicons
+                              name="people-outline"
+                              size={12}
+                              color="#2563EB"
+                            />
+                            <Text
+                              style={[
+                                styles.detailValue,
+                                { color: "#2563EB", fontWeight: "700" },
+                              ]}
+                            >
+                              {client.employees}{" "}
+                              {client.employees === 1
+                                ? "Employee"
+                                : "Employees"}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Row 3: Contract Period */}
+                      <View style={styles.detailRow}>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.detailLabel}>CONTRACT PERIOD</Text>
+                          <View style={styles.detailValWithIcon}>
+                            <Ionicons
+                              name="calendar-outline"
+                              size={12}
+                              color="#64748B"
+                            />
+                            <Text style={styles.detailValue}>
+                              {client.contractStart} → {client.contractEnd}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Row 4: Address */}
+                      <View style={[styles.detailRow, { borderBottomWidth: 0 }]}>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.detailLabel}>ADDRESS</Text>
+                          <View style={styles.detailValWithIcon}>
+                            <Ionicons
+                              name="location-outline"
+                              size={12}
+                              color="#64748B"
+                            />
+                            <Text style={styles.detailValue} numberOfLines={2}>
+                              {client.address}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
 
-                    {/* Action 3-dots */}
-                    <View
-                      style={[
-                        styles.tdCell,
-                        { width: 70, alignItems: "center", justifyContent: "center" },
-                      ]}
-                    >
+                    {/* Dedicated Action Buttons Row */}
+                    <View style={styles.cardActionsRow}>
+                      {/* View Details */}
                       <TouchableOpacity
-                        style={styles.actionDotsBtn}
-                        onPress={() => setActiveMenuClient(client)}
+                        style={styles.cardActionBtn}
+                        onPress={() => setDetailsModalClient(client)}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons name="eye-outline" size={13} color="#334155" />
+                        <Text style={styles.cardActionBtnText}>View</Text>
+                      </TouchableOpacity>
+
+                      {/* Edit */}
+                      <TouchableOpacity
+                        style={[styles.cardActionBtn, styles.editActionBtn]}
+                        onPress={() => handleOpenAddModal(client)}
                         activeOpacity={0.7}
                       >
                         <Ionicons
-                          name="ellipsis-vertical"
-                          size={18}
-                          color="#334155"
+                          name="pencil-outline"
+                          size={13}
+                          color="#2563EB"
                         />
+                        <Text
+                          style={[
+                            styles.cardActionBtnText,
+                            { color: "#2563EB" },
+                          ]}
+                        >
+                          Edit
+                        </Text>
+                      </TouchableOpacity>
+
+                      {/* Credentials */}
+                      <TouchableOpacity
+                        style={[styles.cardActionBtn, styles.credActionBtn]}
+                        onPress={() => setCredentialsModalClient(client)}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name="key-outline"
+                          size={13}
+                          color="#0D9488"
+                        />
+                        <Text
+                          style={[
+                            styles.cardActionBtnText,
+                            { color: "#0D9488" },
+                          ]}
+                        >
+                          Access
+                        </Text>
+                      </TouchableOpacity>
+
+                      {/* Activate / Deactivate Toggle */}
+                      <TouchableOpacity
+                        style={[
+                          styles.cardActionBtn,
+                          isActive
+                            ? styles.deactivateActionBtn
+                            : styles.activateActionBtn,
+                        ]}
+                        onPress={() => dispatch(toggleClientStatus(client.id))}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name="power-outline"
+                          size={13}
+                          color={isActive ? "#D97706" : "#16A34A"}
+                        />
+                        <Text
+                          style={[
+                            styles.cardActionBtnText,
+                            { color: isActive ? "#D97706" : "#16A34A" },
+                          ]}
+                        >
+                          {isActive ? "Disable" : "Enable"}
+                        </Text>
+                      </TouchableOpacity>
+
+                      {/* Delete */}
+                      <TouchableOpacity
+                        style={[styles.cardActionBtn, styles.deleteActionBtn]}
+                        onPress={() => handleDeleteClient(client)}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={13}
+                          color="#DC2626"
+                        />
+                        <Text
+                          style={[
+                            styles.cardActionBtnText,
+                            { color: "#DC2626" },
+                          ]}
+                        >
+                          Delete
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
-                );
-              })}
+                )}
+              </View>
+            );
+          })}
 
-              {filteredClients.length === 0 && (
-                <View style={styles.emptyTable}>
-                  <Ionicons name="business-outline" size={40} color="#CBD5E1" />
-                  <Text style={styles.emptyTableText}>No clients match criteria</Text>
-                </View>
-              )}
+          {filteredClients.length === 0 && (
+            <View style={styles.emptyTable}>
+              <Ionicons name="business-outline" size={40} color="#CBD5E1" />
+              <Text style={styles.emptyTableText}>No clients match criteria</Text>
+              <TouchableOpacity
+                style={styles.emptyResetBtn}
+                onPress={() => dispatch(resetFilters())}
+              >
+                <Text style={styles.emptyResetBtnText}>Reset Filters</Text>
+              </TouchableOpacity>
             </View>
-          </ScrollView>
+          )}
         </View>
         </>
         )}
@@ -1098,54 +1248,29 @@ const styles = StyleSheet.create({
     color: "#475569",
   },
 
-  /* Table Card */
-  tableCard: {
+  /* Client Cards List (Mobile) */
+  clientCardsList: {
+    gap: 8,
+    marginBottom: 20,
+  },
+  clientCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: "#E2E8F0",
     overflow: "hidden",
     shadowColor: "#0F172A",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
     elevation: 2,
   },
-  tableHorizontalScroll: {
-    paddingVertical: 2,
-  },
-  tableInner: {
-    minWidth: 1230,
-  },
-  tableHeaderRow: {
-    flexDirection: "row",
-    backgroundColor: "#F8FAFC",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E2E8F0",
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-  },
-  thCell: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: "#64748B",
-    letterSpacing: 0.6,
-  },
-  tableRow: {
+  cardHeaderTouchable: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 14,
     paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
-  },
-  tdCell: {
-    justifyContent: "center",
-  },
-  clientIdText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#2563EB",
+    paddingVertical: 10,
+    gap: 10,
   },
   initialBox: {
     width: 36,
@@ -1162,66 +1287,135 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#2563EB",
   },
-  clientTextContainer: {
+  clientMainInfo: {
     flex: 1,
+    gap: 3,
   },
-  clientNameText: {
-    fontSize: 13,
+  clientCardName: {
+    fontSize: 13.5,
     fontWeight: "700",
     color: "#0F172A",
   },
-  clientAddressText: {
-    fontSize: 11,
-    color: "#64748B",
-    marginTop: 2,
+  clientIdPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#F1F5F9",
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
   },
-  gstinText: {
-    fontSize: 12,
+  clientIdPillText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#475569",
+  },
+  cardRightCol: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  statusBadgeText: {
+    fontSize: 10.5,
+    fontWeight: "700",
+  },
+
+  /* Expanded Content */
+  cardExpandedContent: {
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    paddingTop: 4,
+    borderTopWidth: 1,
+    borderTopColor: "#F1F5F9",
+    backgroundColor: "#FAFAFA",
+  },
+  cardDetailsBox: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    gap: 4,
+  },
+  detailRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F8FAFC",
+  },
+  detailItemHalf: {
+    flex: 1,
+    gap: 2,
+  },
+  detailLabel: {
+    fontSize: 8.5,
+    fontWeight: "700",
+    color: "#94A3B8",
+    letterSpacing: 0.3,
+  },
+  detailValWithIcon: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  detailValue: {
+    fontSize: 11.5,
+    fontWeight: "600",
+    color: "#1E293B",
+  },
+
+  /* Action Buttons Row */
+  cardActionsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 8,
+  },
+  cardActionBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    borderRadius: 6,
+    paddingVertical: 5,
+  },
+  editActionBtn: {
+    backgroundColor: "#EFF6FF",
+    borderColor: "#BFDBFE",
+  },
+  credActionBtn: {
+    backgroundColor: "#F0FDFA",
+    borderColor: "#99F6E4",
+  },
+  activateActionBtn: {
+    backgroundColor: "#F0FDF4",
+    borderColor: "#BBF7D0",
+  },
+  deactivateActionBtn: {
+    backgroundColor: "#FFFBEB",
+    borderColor: "#FDE68A",
+  },
+  deleteActionBtn: {
+    backgroundColor: "#FEF2F2",
+    borderColor: "#FECACA",
+  },
+  cardActionBtnText: {
+    fontSize: 10.5,
     fontWeight: "600",
     color: "#334155",
   },
-  contactNameText: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#0F172A",
-  },
-  contactPhoneText: {
-    fontSize: 11,
-    color: "#64748B",
-    marginTop: 2,
-  },
-  dateCellText: {
-    fontSize: 12,
-    color: "#334155",
-    fontWeight: "500",
-  },
-  employeesCountText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#2563EB",
-  },
-  statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: "flex-start",
-  },
-  statusBadgeText: {
-    fontSize: 11,
-    fontWeight: "700",
-  },
-  actionDotsBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-  },
   emptyTable: {
-    paddingVertical: 40,
+    paddingVertical: 36,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
@@ -1229,6 +1423,20 @@ const styles = StyleSheet.create({
   emptyTableText: {
     fontSize: 13,
     color: "#64748B",
+  },
+  emptyResetBtn: {
+    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: "#EFF6FF",
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
+  },
+  emptyResetBtnText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#2563EB",
   },
 
   /* Action Popover Menu */
@@ -1522,17 +1730,85 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  /* Billing Drawer Bar */
-  billingDrawerBar: {
+  /* Top User Header Bar */
+  userHeaderBar: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    marginBottom: 12,
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
   },
-  billingModuleLabel: {
-    fontSize: 12,
+  userInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  userAvatarCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#3B82F6",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  userAvatarInitial: {
+    color: "#FFFFFF",
+    fontSize: 18,
     fontWeight: "700",
+  },
+  userNameText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#0F172A",
+  },
+  userRoleText: {
+    fontSize: 12,
     color: "#64748B",
-    letterSpacing: 0.3,
+    marginTop: 1,
+  },
+  drawerHamburgerBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  /* Segmented Pill Tab Bar */
+  pillTabBarWrap: {
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E2E8F0",
+  },
+  pillTabBar: {
+    flexDirection: "row",
+    backgroundColor: "#F1F5F9",
+    borderRadius: 12,
+    padding: 3,
+  },
+  pillTabBtn: {
+    flex: 1,
+    paddingVertical: 9,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activePillTabBtn: {
+    backgroundColor: "#3B82F6",
+  },
+  pillTabText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#64748B",
+  },
+  activePillTabText: {
+    color: "#FFFFFF",
+    fontWeight: "700",
   },
 });
