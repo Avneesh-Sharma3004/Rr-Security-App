@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { Platform } from "react-native";
+import useBottomTabBarStyle from "../useBottomTabBarStyle";
 
 import AdminDashboard from "../../module/admin/AdminDashboard";
 import AdminClientsScreen from "../../module/admin/AdminClientsScreen";
@@ -14,8 +15,14 @@ const Tab = createBottomTabNavigator();
 
 export default function AdminTabNavigator() {
   const tabBarStyle = useBottomTabBarStyle({
-    borderTopColor: "#E9EDF4",
     backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#E2E8F0",
+    elevation: 8,
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
   });
 
   return (
@@ -25,19 +32,7 @@ export default function AdminTabNavigator() {
         headerShown: false,
         tabBarActiveTintColor: "#2563EB",
         tabBarInactiveTintColor: "#64748B",
-        tabBarStyle: {
-          height: Platform.OS === "ios" ? 88 : 68,
-          paddingTop: 8,
-          paddingBottom: Platform.OS === "ios" ? 28 : 10,
-          backgroundColor: "#FFFFFF",
-          borderTopWidth: 1,
-          borderTopColor: "#E2E8F0",
-          elevation: 8,
-          shadowColor: "#0F172A",
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.05,
-          shadowRadius: 8,
-        },
+        tabBarStyle,
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: "600",
