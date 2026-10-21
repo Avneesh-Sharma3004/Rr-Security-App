@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,8 +8,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../../../hooks/UseAuth";
 import DashboardCard from "../../../components/DashboardCard";
+import UserHeader from "../../../components/UserHeader";
 
 const stats = [
   {
@@ -207,10 +206,8 @@ function RecentLeaveRequests({ compact }) {
   );
 }
 
-export default function UserDashboard() {
-  const { user, logout } = useAuth();
+export default function UserDashboard({ navigation }) {
   const { width } = useWindowDimensions();
-  const firstName = user?.name?.trim().split(/\s+/)[0] || "Pawan";
   const date = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "long",
@@ -220,12 +217,12 @@ export default function UserDashboard() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <UserHeader navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerTop}>
-          <Ionicons name="menu-outline" size={26} color="#111A35" />
+        {/* <View style={styles.headerTop}>
           <View style={styles.dateCard}>
             <Ionicons name="calendar-outline" size={20} color="#2875F5" />
             <View>
@@ -233,7 +230,7 @@ export default function UserDashboard() {
               <Text style={styles.todayText}>TODAY</Text>
             </View>
           </View>
-        </View>
+        </View> */}
 
         {/* <View style={styles.greetingRow}>
           <Text
@@ -253,7 +250,6 @@ export default function UserDashboard() {
             <Text style={styles.managerText}>Manager</Text>
           </View>
         </View> */}
-        
 
         <View style={styles.statsGrid}>
           {stats.map((item) => (
@@ -264,23 +260,19 @@ export default function UserDashboard() {
         <AttendanceChart />
         <RecentActivities />
         <RecentLeaveRequests compact={compact} />
-        {/* <Pressable accessibilityRole="button" accessibilityLabel="Log out" style={styles.logoutButton} onPress={logout}>
-          <Ionicons name="log-out-outline" size={16} color="#71809E" />
-          <Text style={styles.logoutText}>Log out</Text>
-        </Pressable> */}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#F4F6FB" },
+  safeArea: { flex: 1, backgroundColor: "#ffff" },
   content: { paddingHorizontal: 17, paddingTop: 9, paddingBottom: 30 },
   headerTop: {
     minHeight: 48,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     marginBottom: 7,
   },
   dateCard: {
@@ -311,7 +303,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 9,
     marginTop: 2,
-    marginBottom:10
+    marginBottom: 10,
   },
   greeting: {
     flexShrink: 1,
@@ -347,7 +339,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 12,
     marginBottom: 21,
-    marginTop:10
+    marginTop: 10,
   },
   sectionCard: {
     backgroundColor: "#FFFFFF",
@@ -515,11 +507,6 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: "#E6EBF3",
   },
-  logoutButton: { alignSelf: "center", flexDirection: "row", alignItems: "center", gap: 6, paddingVertical: 10, paddingHorizontal: 14, marginBottom: 4 },
-  logoutText: { color: "#71809E", fontSize: 12, fontWeight: "600" },
   mobileMeta: { color: "#7A88A3", fontSize: 10 },
   mobileMetaValue: { color: "#43516E", fontWeight: "700" },
 });
-
-
-
