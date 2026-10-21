@@ -4,6 +4,8 @@ import clientsReducer from "./slices/clientsSlice.js";
 import employeesReducer from "./slices/employeesSlice.js";
 import attendanceReducer from "./slices/attendanceSlice.js";
 import shiftsReducer from "./slices/shiftsSlice.js";
+import payrollReducer from "./slices/payrollSlice.js";
+import statutoryReducer from "./slices/statutorySlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     employees: employeesReducer,
     attendance: attendanceReducer,
     shifts: shiftsReducer,
+    payroll: payrollReducer,
+    statutory: statutoryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
